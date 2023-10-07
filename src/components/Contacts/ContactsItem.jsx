@@ -10,7 +10,7 @@ export const ContactsItem = ({ name, number }) => {
   return (
     <>
       <ContactsListInfo>
-        {name} {number}
+        {name} - {number}
       </ContactsListInfo>
       <ContactsListBtn value={name} type="button" onClick={handleDeleteContact}>
         Delete

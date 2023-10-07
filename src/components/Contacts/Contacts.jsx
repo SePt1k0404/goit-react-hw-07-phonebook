@@ -7,7 +7,7 @@ export const Contacts = () => {
   const filteredContactsList = useSelector(filteredContacts);
   const contactsArr = filteredContactsList?.map(el => (
     <ContactsListItem key={el.id}>
-      <ContactsItem name={el.name} number={el.number} />
+      <ContactsItem name={el.contact} number={el.number} />
     </ContactsListItem>
   ));
   return (
