@@ -5,7 +5,7 @@ import {
   FormInputNumber,
 } from './PhoneBookForm.styled';
 import { useDispatch } from 'react-redux';
-import { addContact } from 'redux/contactsSlice';
+import { addContact } from 'redux/operations';
 
 export const PhoneBookForm = () => {
   const dispatch = useDispatch();

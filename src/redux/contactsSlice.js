@@ -1,26 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { nanoid } from 'nanoid';
-import { fetchContacts } from './operations';
+import { fetchContacts, addContact, deleteContact } from './operations';
 
 const slice = createSlice({
   name: 'contacts',
   initialState: { value: [], isLoading: false, error: null },
-  reducers: {
-    addContact(state, action) {
-      if (state.value?.some(el => el.name === action.payload.name)) {
-        alert(`${action.payload.name} is already in contacts.`);
-      } else {
-        action.payload.id = nanoid();
-        state.value.push(action.payload);
-      }
-    },
-    deleteContact(state, action) {
-      return {
-        ...state,
-        value: state.value.filter(el => el.name !== action.payload),
-      };
-    },
-  },
   extraReducers: builder => {
     builder
       .addCase(fetchContacts.pending, state => {
@@ -32,7 +15,35 @@ const slice = createSlice({
       })
       .addCase(fetchContacts.rejected, (state, action) => {
         state.isLoading = false;
-        if (action.error.name !== 'CanceledError') {
+        if (action.payload !== 'canceled') {
+          alert(`Emerged some problems. Try to reload the page!`);
+        }
+      })
+      .addCase(addContact.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(addContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        if (!state.value?.some(el => el.name === action.payload?.name)) {
+          state.value.push(action.payload);
+        }
+      })
+      .addCase(addContact.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload !== 'canceled') {
+          alert(`Emerged some problems. Try to reload the page!`);
+        }
+      })
+      .addCase(deleteContact.pending, state => {
+        state.isLoading = true;
+      })
+      .addCase(deleteContact.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.value = state.value.filter(el => el.id !== action.payload.id);
+      })
+      .addCase(deleteContact.rejected, (state, action) => {
+        state.isLoading = false;
+        if (action.payload !== 'canceled') {
           alert(`Emerged some problems. Try to reload the page!`);
         }
       });
@@ -40,4 +51,3 @@ const slice = createSlice({
 });
 
 export const contactsReducer = slice.reducer;
-export const { addContact, deleteContact } = slice.actions;
